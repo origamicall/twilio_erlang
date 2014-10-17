@@ -197,7 +197,7 @@ code_change(_OldVsn, State, _Extra) ->
 execute(State, Action) ->
     #pc_state{history = Hist} = State,
     {NewCS, NewState, Msg} = exec2(next, State, Action, []),
-    Reply = "<?xml version=\"1.0\"?><Response>"
+    Reply = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Response>"
         ++ lists:flatten(Msg) ++ "</Response>",
     NewState2 = NewState#pc_state{currentstate = NewCS,
                                history = [Action | Hist]},

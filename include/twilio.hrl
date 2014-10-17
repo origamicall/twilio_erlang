@@ -162,3 +162,7 @@
 -define(CONFERENCEWaitMethod,      ["get", "post"]).
 -define(CONFERENCEMinParticipants, 2).
 -define(CONFERENCEMaxParticipants, 40).
+
+
+-define(DU(F), io:format("~p: ~p :: ~p~n",[?MODULE,?LINE,F])).
+-define(DO(F), io:format("~p :~p ::~s =>  ~p~n",[?MODULE,?LINE,??F,F])).

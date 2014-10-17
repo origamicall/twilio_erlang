@@ -42,12 +42,17 @@
 
 %% @doc Encodes a set of twiml records as an XML document.
 encode(Elements) ->
+    ?DO(Elements),
     Content = [{'Response', [], [to_xmerl_element(El) || El <- Elements]}],
-    xmerl:export_simple(Content, xmerl_xml).
+    Prolog = ["<?xml version=\"1.0\" encoding=\"UTF-8\"?>"],
+    ?DO(Content),
+    Result = xmerl:export_simple(Content, xmerl_xml, [{prolog, Prolog}]),
+    ?DO(Result),
+    Result.
 
 encode_record(Record) ->
     El = xmerl:export_simple([to_xmerl_element(Record)], xmerl_xml),
-    "<?xml version=\"1.0\"?>" ++ XML = lists:flatten(El),
+    "<?xml version=\"1.0\"  encoding=\"UTF-8\"?>" ++ XML = lists:flatten(El),
     {xml, XML}.
 
 %% @doc Converts a twiml record to an xmerl XML element.
@@ -796,7 +801,7 @@ decr(Rank) -> List = string:tokens(Rank, "."),
 %-ifdef(TEST).
 -include_lib("eunit/include/eunit.hrl").
 
--define(XML(D), "<?xml version=\"1.0\"?><Response>"D"</Response>").
+-define(XML(D), "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Response>"D"</Response>").
 
 encode_test_() ->
     [{"say twiml",

@@ -27,7 +27,8 @@ make_call(AccountSID, AuthToken, From, To, Params) ->
     Params2 = [{"From", From}, {"To", To} | Params],
 
     Path = "/Accounts/" ++ AccountSID ++ "/Calls.json",
-
+    io:format("Path: ~p~n", [Path]),
+    io:format("Params2: ~p~n", [Params2]),
     request(AccountSID, AuthToken, post, Path, Params2).
 
 %% @doc Sends an SMS.  Opts is a list of parameters to send
@@ -48,6 +49,7 @@ send_sms(AccountSID, AuthToken, From, To, Body) ->
 request(AccountSID, AuthToken, get, Path, []) ->
     RequestURL = "https://" ++ AccountSID ++ ":" ++ AuthToken
                  ++ "@"?BASE_URL"/"?API_VERSION_2010 ++ Path,
+    io:format("RequestURL:~p~n", [RequestURL]),
     Request = {RequestURL, [{"Accept", "application/json"}]},
     case httpc:request(get, Request, [], []) of
         {ok, {{_, 200, _}, _, R}} ->
@@ -60,9 +62,10 @@ request(AccountSID, AuthToken, get, Path, []) ->
 request(AccountSID, AuthToken, post, Path, Params) ->
     RequestURL = "https://" ++ AccountSID ++ ":" ++ AuthToken
                  ++ "@"?BASE_URL"/"?API_VERSION_2010 ++ Path,
-    
+    io:format("RequestURL:~p~n", [RequestURL]),
     ParamsString = expand_params(Params),
     Request = {RequestURL, [], "application/x-www-form-urlencoded", ParamsString},
+    io:format("Request:~p~n", [Request]),
     % @TODO properly parse for twilio errors
     case httpc:request(post, Request, [], []) of
         {ok, {{_, 201, _}, _, _}} ->
